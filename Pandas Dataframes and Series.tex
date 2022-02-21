@@ -1,0 +1,1051 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Pandas Dataframes and Series}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{churn}\PY{o}{=}\PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{customer\PYZus{}churn.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{churn}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{:}\PY{l+m+mi}{200}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{:}\PY{l+m+mi}{16}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+     SeniorCitizen Partner Dependents  tenure PhoneService     MultipleLines  \textbackslash{}
+2                0      No         No       2          Yes                No
+3                0      No         No      45           No  No phone service
+4                0      No         No       2          Yes                No
+5                0      No         No       8          Yes               Yes
+6                0      No        Yes      22          Yes               Yes
+..             {\ldots}     {\ldots}        {\ldots}     {\ldots}          {\ldots}               {\ldots}
+195              0     Yes         No      20          Yes                No
+196              0     Yes        Yes      24          Yes               Yes
+197              0      No         No      59          Yes               Yes
+198              0     Yes        Yes      72          Yes               Yes
+199              0      No        Yes       1          Yes                No
+
+    InternetService       OnlineSecurity         OnlineBackup  \textbackslash{}
+2               DSL                  Yes                  Yes
+3               DSL                  Yes                   No
+4       Fiber optic                   No                   No
+5       Fiber optic                   No                   No
+6       Fiber optic                   No                  Yes
+..              {\ldots}                  {\ldots}                  {\ldots}
+195     Fiber optic                  Yes                  Yes
+196              No  No internet service  No internet service
+197     Fiber optic                   No                  Yes
+198     Fiber optic                   No                  Yes
+199              No  No internet service  No internet service
+
+        DeviceProtection          TechSupport          StreamingTV  \textbackslash{}
+2                     No                   No                   No
+3                    Yes                  Yes                   No
+4                     No                   No                   No
+5                    Yes                   No                  Yes
+6                     No                   No                  Yes
+..                   {\ldots}                  {\ldots}                  {\ldots}
+195                   No                  Yes                  Yes
+196  No internet service  No internet service  No internet service
+197                  Yes                  Yes                  Yes
+198                  Yes                  Yes                  Yes
+199  No internet service  No internet service  No internet service
+
+         StreamingMovies        Contract
+2                     No  Month-to-month
+3                     No        One year
+4                     No  Month-to-month
+5                    Yes  Month-to-month
+6                     No  Month-to-month
+..                   {\ldots}             {\ldots}
+195                   No  Month-to-month
+196  No internet service        Two year
+197                  Yes  Month-to-month
+198                  Yes        Two year
+199  No internet service  Month-to-month
+
+[198 rows x 14 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{churn}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+    customerID  gender  SeniorCitizen Partner Dependents  tenure PhoneService  \textbackslash{}
+0   7590-VHVEG  Female              0     Yes         No       1           No
+1   5575-GNVDE    Male              0      No         No      34          Yes
+2   3668-QPYBK    Male              0      No         No       2          Yes
+3   7795-CFOCW    Male              0      No         No      45           No
+4   9237-HQITU  Female              0      No         No       2          Yes
+..         {\ldots}     {\ldots}            {\ldots}     {\ldots}        {\ldots}     {\ldots}          {\ldots}
+95  8637-XJIVR  Female              0      No         No      12          Yes
+96  9803-FTJCG    Male              0     Yes        Yes      71          Yes
+97  0278-YXOOG    Male              0      No         No       5          Yes
+98  3212-KXOCR    Male              0      No         No      52          Yes
+99  4598-XLKNJ  Female              1     Yes         No      25          Yes
+
+       MultipleLines InternetService       OnlineSecurity  {\ldots}  \textbackslash{}
+0   No phone service             DSL                   No  {\ldots}
+1                 No             DSL                  Yes  {\ldots}
+2                 No             DSL                  Yes  {\ldots}
+3   No phone service             DSL                  Yes  {\ldots}
+4                 No     Fiber optic                   No  {\ldots}
+..               {\ldots}             {\ldots}                  {\ldots}  {\ldots}
+95               Yes     Fiber optic                  Yes  {\ldots}
+96               Yes             DSL                  Yes  {\ldots}
+97                No              No  No internet service  {\ldots}
+98                No              No  No internet service  {\ldots}
+99                No     Fiber optic                   No  {\ldots}
+
+       DeviceProtection          TechSupport          StreamingTV  \textbackslash{}
+0                    No                   No                   No
+1                   Yes                   No                   No
+2                    No                   No                   No
+3                   Yes                  Yes                   No
+4                    No                   No                   No
+..                  {\ldots}                  {\ldots}                  {\ldots}
+95                   No                   No                   No
+96                   No                  Yes                   No
+97  No internet service  No internet service  No internet service
+98  No internet service  No internet service  No internet service
+99                  Yes                   No                  Yes
+
+        StreamingMovies        Contract PaperlessBilling  \textbackslash{}
+0                    No  Month-to-month              Yes
+1                    No        One year               No
+2                    No  Month-to-month              Yes
+3                    No        One year               No
+4                    No  Month-to-month              Yes
+..                  {\ldots}             {\ldots}              {\ldots}
+95                   No  Month-to-month              Yes
+96                   No        One year              Yes
+97  No internet service  Month-to-month               No
+98  No internet service        Two year               No
+99                  Yes  Month-to-month              Yes
+
+                PaymentMethod MonthlyCharges  TotalCharges Churn
+0            Electronic check          29.85         29.85    No
+1                Mailed check          56.95        1889.5    No
+2                Mailed check          53.85        108.15   Yes
+3   Bank transfer (automatic)          42.30       1840.75    No
+4            Electronic check          70.70        151.65   Yes
+..                        {\ldots}            {\ldots}           {\ldots}   {\ldots}
+95           Electronic check          78.95        927.35   Yes
+96    Credit card (automatic)          66.85        4748.7    No
+97               Mailed check          21.05        113.85   Yes
+98  Bank transfer (automatic)          21.00        1107.2    No
+99           Electronic check          98.50        2514.5   Yes
+
+[100 rows x 21 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{churn}\PY{o}{.}\PY{n}{tail}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+      customerID  gender  SeniorCitizen Partner Dependents  tenure  \textbackslash{}
+7033  9767-FFLEM    Male              0      No         No      38
+7034  0639-TSIQW  Female              0      No         No      67
+7035  8456-QDAVC    Male              0      No         No      19
+7036  7750-EYXWZ  Female              0      No         No      12
+7037  2569-WGERO  Female              0      No         No      72
+7038  6840-RESVB    Male              0     Yes        Yes      24
+7039  2234-XADUH  Female              0     Yes        Yes      72
+7040  4801-JZAZL  Female              0     Yes        Yes      11
+7041  8361-LTMKD    Male              1     Yes         No       4
+7042  3186-AJIEK    Male              0      No         No      66
+
+     PhoneService     MultipleLines InternetService       OnlineSecurity  {\ldots}  \textbackslash{}
+7033          Yes                No     Fiber optic                   No  {\ldots}
+7034          Yes               Yes     Fiber optic                  Yes  {\ldots}
+7035          Yes                No     Fiber optic                   No  {\ldots}
+7036           No  No phone service             DSL                   No  {\ldots}
+7037          Yes                No              No  No internet service  {\ldots}
+7038          Yes               Yes             DSL                  Yes  {\ldots}
+7039          Yes               Yes     Fiber optic                   No  {\ldots}
+7040           No  No phone service             DSL                  Yes  {\ldots}
+7041          Yes               Yes     Fiber optic                   No  {\ldots}
+7042          Yes                No     Fiber optic                  Yes  {\ldots}
+
+         DeviceProtection          TechSupport          StreamingTV  \textbackslash{}
+7033                   No                   No                   No
+7034                  Yes                   No                  Yes
+7035                   No                   No                  Yes
+7036                  Yes                  Yes                  Yes
+7037  No internet service  No internet service  No internet service
+7038                  Yes                  Yes                  Yes
+7039                  Yes                   No                  Yes
+7040                   No                   No                   No
+7041                   No                   No                   No
+7042                  Yes                  Yes                  Yes
+
+          StreamingMovies        Contract PaperlessBilling  \textbackslash{}
+7033                   No  Month-to-month              Yes
+7034                   No  Month-to-month              Yes
+7035                   No  Month-to-month              Yes
+7036                  Yes        One year               No
+7037  No internet service        Two year              Yes
+7038                  Yes        One year              Yes
+7039                  Yes        One year              Yes
+7040                   No  Month-to-month              Yes
+7041                   No  Month-to-month              Yes
+7042                  Yes        Two year              Yes
+
+                  PaymentMethod MonthlyCharges  TotalCharges Churn
+7033    Credit card (automatic)          69.50       2625.25    No
+7034    Credit card (automatic)         102.95       6886.25   Yes
+7035  Bank transfer (automatic)          78.70        1495.1    No
+7036           Electronic check          60.65         743.3    No
+7037  Bank transfer (automatic)          21.15        1419.4    No
+7038               Mailed check          84.80        1990.5    No
+7039    Credit card (automatic)         103.20        7362.9    No
+7040           Electronic check          29.60        346.45    No
+7041               Mailed check          74.40         306.6   Yes
+7042  Bank transfer (automatic)         105.65        6844.5    No
+
+[10 rows x 21 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{churn}\PY{o}{.}\PY{n}{tail}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+      customerID gender  SeniorCitizen Partner Dependents  tenure  \textbackslash{}
+7042  3186-AJIEK   Male              0      No         No      66
+
+     PhoneService MultipleLines InternetService OnlineSecurity  {\ldots}  \textbackslash{}
+7042          Yes            No     Fiber optic            Yes  {\ldots}
+
+     DeviceProtection TechSupport StreamingTV StreamingMovies  Contract  \textbackslash{}
+7042              Yes         Yes         Yes             Yes  Two year
+
+     PaperlessBilling              PaymentMethod MonthlyCharges  TotalCharges  \textbackslash{}
+7042              Yes  Bank transfer (automatic)         105.65        6844.5
+
+     Churn
+7042    No
+
+[1 rows x 21 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{churn}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{n}{by}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tenure}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+      customerID  gender  SeniorCitizen Partner Dependents  tenure  \textbackslash{}
+1672  4737-AQCPU    Male              0     Yes        Yes      72
+193   9680-NIAUV  Female              0     Yes        Yes      72
+4553  5914-XRFQB    Male              0     Yes         No      72
+483   5168-MQQCA  Female              0     Yes         No      72
+3266  0464-WJTKO  Female              0     Yes        Yes      72
+{\ldots}          {\ldots}     {\ldots}            {\ldots}     {\ldots}        {\ldots}     {\ldots}
+1082  4367-NUYAO    Male              0     Yes        Yes       0
+3826  3213-VVOLG    Male              0     Yes        Yes       0
+936   5709-LVOEQ  Female              0     Yes        Yes       0
+6754  2775-SEFEE    Male              0      No        Yes       0
+1340  1371-DWPAZ  Female              0     Yes        Yes       0
+
+     PhoneService     MultipleLines InternetService       OnlineSecurity  {\ldots}  \textbackslash{}
+1672          Yes               Yes             DSL                  Yes  {\ldots}
+193           Yes               Yes     Fiber optic                  Yes  {\ldots}
+4553          Yes               Yes     Fiber optic                  Yes  {\ldots}
+483           Yes               Yes     Fiber optic                   No  {\ldots}
+3266          Yes                No              No  No internet service  {\ldots}
+{\ldots}           {\ldots}               {\ldots}             {\ldots}                  {\ldots}  {\ldots}
+1082          Yes               Yes              No  No internet service  {\ldots}
+3826          Yes               Yes              No  No internet service  {\ldots}
+936           Yes                No             DSL                  Yes  {\ldots}
+6754          Yes               Yes             DSL                  Yes  {\ldots}
+1340           No  No phone service             DSL                  Yes  {\ldots}
+
+         DeviceProtection          TechSupport          StreamingTV  \textbackslash{}
+1672                  Yes                  Yes                   No
+193                   Yes                   No                  Yes
+4553                  Yes                  Yes                  Yes
+483                   Yes                  Yes                  Yes
+3266  No internet service  No internet service  No internet service
+{\ldots}                   {\ldots}                  {\ldots}                  {\ldots}
+1082  No internet service  No internet service  No internet service
+3826  No internet service  No internet service  No internet service
+936                   Yes                   No                  Yes
+6754                   No                  Yes                   No
+1340                  Yes                  Yes                  Yes
+
+          StreamingMovies  Contract PaperlessBilling  \textbackslash{}
+1672                   No  Two year               No
+193                   Yes  Two year               No
+4553                  Yes  Two year              Yes
+483                   Yes  One year              Yes
+3266  No internet service  Two year               No
+{\ldots}                   {\ldots}       {\ldots}              {\ldots}
+1082  No internet service  Two year               No
+3826  No internet service  Two year               No
+936                   Yes  Two year               No
+6754                   No  Two year              Yes
+1340                   No  Two year               No
+
+                  PaymentMethod MonthlyCharges  TotalCharges Churn
+1672    Credit card (automatic)          72.10       5016.65    No
+193     Credit card (automatic)         109.70        8129.3    No
+4553  Bank transfer (automatic)         115.80        8424.9    No
+483   Bank transfer (automatic)         108.50        8003.8    No
+3266  Bank transfer (automatic)          20.10       1460.85    No
+{\ldots}                         {\ldots}            {\ldots}           {\ldots}   {\ldots}
+1082               Mailed check          25.75                  No
+3826               Mailed check          25.35                  No
+936                Mailed check          80.85                  No
+6754  Bank transfer (automatic)          61.90                  No
+1340    Credit card (automatic)          56.05                  No
+
+[7043 rows x 21 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{churn}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{(}\PY{n}{churn}\PY{o}{.}\PY{n}{tenure}\PY{o}{\PYZgt{}}\PY{l+m+mi}{50}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{churn}\PY{o}{.}\PY{n}{gender}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Female}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+      customerID  gender  SeniorCitizen Partner Dependents  tenure  \textbackslash{}
+15    3655-SNQYZ  Female              0     Yes        Yes      69
+16    8191-XWSZG  Female              0      No         No      52
+23    3638-WEABW  Female              0     Yes         No      58
+30    3841-NFECX  Female              1     Yes         No      71
+35    6234-RAAPL  Female              0     Yes        Yes      72
+{\ldots}          {\ldots}     {\ldots}            {\ldots}     {\ldots}        {\ldots}     {\ldots}
+7023  1035-IPQPU  Female              1     Yes         No      63
+7028  9281-CEDRU  Female              0     Yes         No      68
+7034  0639-TSIQW  Female              0      No         No      67
+7037  2569-WGERO  Female              0      No         No      72
+7039  2234-XADUH  Female              0     Yes        Yes      72
+
+     PhoneService MultipleLines InternetService       OnlineSecurity  {\ldots}  \textbackslash{}
+15            Yes           Yes     Fiber optic                  Yes  {\ldots}
+16            Yes            No              No  No internet service  {\ldots}
+23            Yes           Yes             DSL                   No  {\ldots}
+30            Yes           Yes     Fiber optic                  Yes  {\ldots}
+35            Yes           Yes     Fiber optic                  Yes  {\ldots}
+{\ldots}           {\ldots}           {\ldots}             {\ldots}                  {\ldots}  {\ldots}
+7023          Yes           Yes     Fiber optic                   No  {\ldots}
+7028          Yes            No             DSL                   No  {\ldots}
+7034          Yes           Yes     Fiber optic                  Yes  {\ldots}
+7037          Yes            No              No  No internet service  {\ldots}
+7039          Yes           Yes     Fiber optic                   No  {\ldots}
+
+         DeviceProtection          TechSupport          StreamingTV  \textbackslash{}
+15                    Yes                  Yes                  Yes
+16    No internet service  No internet service  No internet service
+23                     No                  Yes                   No
+30                    Yes                  Yes                   No
+35                     No                  Yes                  Yes
+{\ldots}                   {\ldots}                  {\ldots}                  {\ldots}
+7023                  Yes                   No                  Yes
+7028                   No                  Yes                  Yes
+7034                  Yes                   No                  Yes
+7037  No internet service  No internet service  No internet service
+7039                  Yes                   No                  Yes
+
+          StreamingMovies        Contract PaperlessBilling  \textbackslash{}
+15                    Yes        Two year               No
+16    No internet service        One year               No
+23                     No        Two year              Yes
+30                     No        Two year              Yes
+35                     No        Two year               No
+{\ldots}                   {\ldots}             {\ldots}              {\ldots}
+7023                  Yes  Month-to-month              Yes
+7028                   No        Two year               No
+7034                   No  Month-to-month              Yes
+7037  No internet service        Two year              Yes
+7039                  Yes        One year              Yes
+
+                  PaymentMethod MonthlyCharges  TotalCharges Churn
+15      Credit card (automatic)         113.25       7895.15    No
+16                 Mailed check          20.65       1022.95    No
+23      Credit card (automatic)          59.90        3505.1    No
+30      Credit card (automatic)          96.35       6766.95    No
+35    Bank transfer (automatic)          99.90        7251.7    No
+{\ldots}                         {\ldots}            {\ldots}           {\ldots}   {\ldots}
+7023           Electronic check         103.50        6479.4    No
+7028  Bank transfer (automatic)          64.10       4326.25    No
+7034    Credit card (automatic)         102.95       6886.25   Yes
+7037  Bank transfer (automatic)          21.15        1419.4    No
+7039    Credit card (automatic)         103.20        7362.9    No
+
+[1022 rows x 21 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{churn}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{(}\PY{n}{churn}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gender}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Male}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{churn}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SeniorCitizen}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+      customerID gender  SeniorCitizen Partner Dependents  tenure  \textbackslash{}
+1     5575-GNVDE   Male              0      No         No      34
+2     3668-QPYBK   Male              0      No         No       2
+3     7795-CFOCW   Male              0      No         No      45
+6     1452-KIOVK   Male              0      No        Yes      22
+9     6388-TABGU   Male              0      No        Yes      62
+{\ldots}          {\ldots}    {\ldots}            {\ldots}     {\ldots}        {\ldots}     {\ldots}
+7027  0550-DCXLH   Male              0      No         No      13
+7033  9767-FFLEM   Male              0      No         No      38
+7035  8456-QDAVC   Male              0      No         No      19
+7038  6840-RESVB   Male              0     Yes        Yes      24
+7042  3186-AJIEK   Male              0      No         No      66
+
+     PhoneService     MultipleLines InternetService OnlineSecurity  {\ldots}  \textbackslash{}
+1             Yes                No             DSL            Yes  {\ldots}
+2             Yes                No             DSL            Yes  {\ldots}
+3              No  No phone service             DSL            Yes  {\ldots}
+6             Yes               Yes     Fiber optic             No  {\ldots}
+9             Yes                No             DSL            Yes  {\ldots}
+{\ldots}           {\ldots}               {\ldots}             {\ldots}            {\ldots}  {\ldots}
+7027          Yes                No             DSL             No  {\ldots}
+7033          Yes                No     Fiber optic             No  {\ldots}
+7035          Yes                No     Fiber optic             No  {\ldots}
+7038          Yes               Yes             DSL            Yes  {\ldots}
+7042          Yes                No     Fiber optic            Yes  {\ldots}
+
+     DeviceProtection TechSupport StreamingTV StreamingMovies        Contract  \textbackslash{}
+1                 Yes          No          No              No        One year
+2                  No          No          No              No  Month-to-month
+3                 Yes         Yes          No              No        One year
+6                  No          No         Yes              No  Month-to-month
+9                  No          No          No              No        One year
+{\ldots}               {\ldots}         {\ldots}         {\ldots}             {\ldots}             {\ldots}
+7027               No         Yes         Yes             Yes  Month-to-month
+7033               No          No          No              No  Month-to-month
+7035               No          No         Yes              No  Month-to-month
+7038              Yes         Yes         Yes             Yes        One year
+7042              Yes         Yes         Yes             Yes        Two year
+
+     PaperlessBilling              PaymentMethod MonthlyCharges  TotalCharges  \textbackslash{}
+1                  No               Mailed check          56.95        1889.5
+2                 Yes               Mailed check          53.85        108.15
+3                  No  Bank transfer (automatic)          42.30       1840.75
+6                 Yes    Credit card (automatic)          89.10        1949.4
+9                  No  Bank transfer (automatic)          56.15       3487.95
+{\ldots}               {\ldots}                        {\ldots}            {\ldots}           {\ldots}
+7027               No               Mailed check          73.35        931.55
+7033              Yes    Credit card (automatic)          69.50       2625.25
+7035              Yes  Bank transfer (automatic)          78.70        1495.1
+7038              Yes               Mailed check          84.80        1990.5
+7042              Yes  Bank transfer (automatic)         105.65        6844.5
+
+     Churn
+1       No
+2      Yes
+3       No
+6       No
+9       No
+{\ldots}    {\ldots}
+7027    No
+7033    No
+7035    No
+7038    No
+7042    No
+
+[2981 rows x 21 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{churn}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{(}\PY{n}{churn}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TechSupport}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Yes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{churn}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Churn}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{No}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+      customerID  gender  SeniorCitizen Partner Dependents  tenure  \textbackslash{}
+3     7795-CFOCW    Male              0      No         No      45
+14    5129-JLPIS    Male              0      No         No      25
+15    3655-SNQYZ  Female              0     Yes        Yes      69
+23    3638-WEABW  Female              0     Yes         No      58
+24    6322-HRPFA    Male              0     Yes        Yes      49
+{\ldots}          {\ldots}     {\ldots}            {\ldots}     {\ldots}        {\ldots}     {\ldots}
+7027  0550-DCXLH    Male              0      No         No      13
+7028  9281-CEDRU  Female              0     Yes         No      68
+7036  7750-EYXWZ  Female              0      No         No      12
+7038  6840-RESVB    Male              0     Yes        Yes      24
+7042  3186-AJIEK    Male              0      No         No      66
+
+     PhoneService     MultipleLines InternetService OnlineSecurity  {\ldots}  \textbackslash{}
+3              No  No phone service             DSL            Yes  {\ldots}
+14            Yes                No     Fiber optic            Yes  {\ldots}
+15            Yes               Yes     Fiber optic            Yes  {\ldots}
+23            Yes               Yes             DSL             No  {\ldots}
+24            Yes                No             DSL            Yes  {\ldots}
+{\ldots}           {\ldots}               {\ldots}             {\ldots}            {\ldots}  {\ldots}
+7027          Yes                No             DSL             No  {\ldots}
+7028          Yes                No             DSL             No  {\ldots}
+7036           No  No phone service             DSL             No  {\ldots}
+7038          Yes               Yes             DSL            Yes  {\ldots}
+7042          Yes                No     Fiber optic            Yes  {\ldots}
+
+     DeviceProtection TechSupport StreamingTV StreamingMovies        Contract  \textbackslash{}
+3                 Yes         Yes          No              No        One year
+14                Yes         Yes         Yes             Yes  Month-to-month
+15                Yes         Yes         Yes             Yes        Two year
+23                 No         Yes          No              No        Two year
+24                 No         Yes          No              No  Month-to-month
+{\ldots}               {\ldots}         {\ldots}         {\ldots}             {\ldots}             {\ldots}
+7027               No         Yes         Yes             Yes  Month-to-month
+7028               No         Yes         Yes              No        Two year
+7036              Yes         Yes         Yes             Yes        One year
+7038              Yes         Yes         Yes             Yes        One year
+7042              Yes         Yes         Yes             Yes        Two year
+
+     PaperlessBilling              PaymentMethod MonthlyCharges  TotalCharges  \textbackslash{}
+3                  No  Bank transfer (automatic)          42.30       1840.75
+14                Yes           Electronic check         105.50       2686.05
+15                 No    Credit card (automatic)         113.25       7895.15
+23                Yes    Credit card (automatic)          59.90        3505.1
+24                 No    Credit card (automatic)          59.60        2970.3
+{\ldots}               {\ldots}                        {\ldots}            {\ldots}           {\ldots}
+7027               No               Mailed check          73.35        931.55
+7028               No  Bank transfer (automatic)          64.10       4326.25
+7036               No           Electronic check          60.65         743.3
+7038              Yes               Mailed check          84.80        1990.5
+7042              Yes  Bank transfer (automatic)         105.65        6844.5
+
+     Churn
+3       No
+14      No
+15      No
+23      No
+24      No
+{\ldots}    {\ldots}
+7027    No
+7028    No
+7036    No
+7038    No
+7042    No
+
+[1734 rows x 21 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{churn}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{(}\PY{n}{churn}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Contract}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Month\PYZhy{}to\PYZhy{}Month}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{churn}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Churn}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Yes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+Empty DataFrame
+Columns: [customerID, gender, SeniorCitizen, Partner, Dependents, tenure,
+PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup,
+DeviceProtection, TechSupport, StreamingTV, StreamingMovies, Contract,
+PaperlessBilling, PaymentMethod, MonthlyCharges, TotalCharges, Churn]
+Index: []
+
+[0 rows x 21 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{count}\PY{o}{=}\PY{l+m+mi}{0}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{churn}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{p}{(}\PY{p}{(}\PY{n}{churn}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TechSupport}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Yes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{churn}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SeniorCitizen}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+m+mi}{1}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{churn}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gender}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Male}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                  \PY{n}{count}\PY{o}{+}\PY{o}{=}\PY{l+m+mi}{1}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{count}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+119
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
